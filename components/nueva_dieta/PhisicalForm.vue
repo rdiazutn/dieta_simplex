@@ -4,7 +4,7 @@
     <v-card-text>
       <v-row>
         <v-col md="6" lg="4">
-          <TheTextInput v-model="phisicalInfo.name" label="Nombre"/>
+          <TheTextInput v-model="phisicalInfo.name" label="Nombre" />
         </v-col>
       </v-row>
     </v-card-text>

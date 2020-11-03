@@ -6,7 +6,7 @@
       </v-row>
       <PhisicalForm class="my-4" />
       <PreferencesForm class="my-4" />
-      <!-- <DietResults /> -->
+      <DietResults />
     </template>
   </TheLayoutWithHeader>
 </template>

@@ -84,10 +84,9 @@ export default {
       do {
         cont++
         elemento1 = random(0, productos.length - 1)
-        elemento2 = random(0, productos.length - 1)
-        while (elemento1 === elemento2) {
+        do {
           elemento2 = random(0, productos.length - 1)
-        }
+        } while (elemento1 === elemento2)
         if (cont === 50) {
           return null
         }

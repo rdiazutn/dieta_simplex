@@ -3,54 +3,54 @@ export const state = () => {
   return {
     comidasPorCategoria: [
       {
-        nombreCategoria: 'Verduras A',
+        nombre: 'Verduras A',
         totalDeDieta: 100,
         productos: [
           {
             nombre: 'Zanahoria',
             precio: 12.2,
-            puntaje: 100
+            puntaje: 101
           },
           {
             nombre: 'Papa',
-            precio: 62.2,
+            precio: 3.2,
             puntaje: 100
           },
           {
             nombre: 'Ajo',
-            precio: 62.2,
+            precio: 4.2,
             puntaje: 100
           },
           {
             nombre: 'Zapallo',
-            precio: 62.2,
+            precio: 5.2,
             puntaje: 100
           },
           {
             nombre: 'Calabaza',
-            precio: 62.2,
+            precio: 6.2,
             puntaje: 100
           },
           {
             nombre: 'Tomate',
-            precio: 62.2,
+            precio: 7.2,
             puntaje: 100
           },
           {
             nombre: 'Lechuga',
-            precio: 62.2,
+            precio: 8.2,
             puntaje: 100
           }
         ]
       },
       {
-        nombreCategoria: 'Verduras B',
+        nombre: 'Verduras B',
         totalDeDieta: 500,
         productos: [
           {
             nombre: 'Pera',
             precio: 0.2,
-            puntaje: 100
+            puntaje: 101
           },
           {
             nombre: 'Kiwi',
