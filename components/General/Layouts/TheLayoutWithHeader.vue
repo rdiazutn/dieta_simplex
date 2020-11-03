@@ -20,9 +20,7 @@
       <v-card-text v-show="slotInUse('body')" class="py-0">
         <v-row v-show="slotInUse('body')">
           <v-col>
-            <v-card outlined>
-              <slot name="body" />
-            </v-card>
+            <slot name="body" />
           </v-col>
         </v-row>
       </v-card-text>

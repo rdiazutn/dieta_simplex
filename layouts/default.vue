@@ -1,116 +1,89 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
     <v-app-bar
-      :clipped-left="clipped"
       fixed
       app
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar>
-    <v-main>
-      <v-container>
-        <nuxt />
-      </v-container>
-    </v-main>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
+      <LanguageMenu />
+      <template v-slot:extension>
+        <v-tabs
+          v-model="tab"
+          align-with-title
+        >
+          <v-tab
+            v-for="(item,idx) in menus"
+            :key="idx"
+            nuxt
+            :to="item.to"
+          >
+            <v-icon>
+              {{ item.icon }}
             </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+            {{ item.title }}
+          </v-tab>
+        </v-tabs>
+      </template>
+    </v-app-bar>
+    <v-main class="nuxt-component">
+      <v-layout
+        column
+        align-center
+      >
+        <v-flex
+          xs12
+          sm8
+          md6
+        >
+          <v-container class="pageContainer">
+            <nuxt class="nuxt-component-inner" />
+          </v-container>
+        </v-flex>
+      </v-layout>
+    </v-main>
     <v-footer
-      :absolute="!fixed"
+      absolute
       app
     >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <v-row justify="center" align="center">
+        &copy; {{ new Date().getFullYear() }}
+      </v-row>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+import LanguageMenu from '~/components/General/Menus/LanguageMenu'
 export default {
+  components: {
+    LanguageMenu
+  },
   data () {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
+      title: 'Simplex dieta',
+      tab: 0
+    }
+  },
+  computed: {
+    menus () {
+      return [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
+          icon: 'mdi-home',
+          title: this.$t('inicio'),
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: 'mdi-list',
+          title: this.$t('mis_dietas'),
+          to: '/mis_dietas'
+        },
+        {
+          icon: 'mdi-plus',
+          title: this.$t('nueva_dieta'),
+          to: '/nueva_dieta'
         }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+      ]
     }
   }
 }
