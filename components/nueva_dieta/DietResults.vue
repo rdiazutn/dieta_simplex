@@ -17,6 +17,7 @@
 <script>
 import SimpleSimplex from 'simple-simplex'
 import { cloneDeep } from 'lodash'
+import { SimplexDiaz } from '~/service/simplex'
 import ThePrimaryButton from '~/components/General/Buttons/ThePrimaryButton'
 export default {
   components: {
@@ -30,6 +31,10 @@ export default {
     comidasPorCategoria () {
       return this.$store.state.comidasPorCategoria
     }
+  },
+  mounted () {
+    const simplexResult = SimplexDiaz.testSimplex()
+    console.log(simplexResult)
   },
   methods: {
     procesarResultados () {
@@ -58,7 +63,7 @@ export default {
       const objectiveObject = {}
       this.comidasPorCategoria.forEach((categoria) => {
         categoria.productos.forEach((producto) => {
-          objectiveObject[this.getAttributeName(categoria, producto)] = initValue === 0 ? initValue : producto.precio
+          objectiveObject[this.getAttributeName(categoria, producto)] = initValue === 0 ? initValue : -producto.precio
         })
       })
       return objectiveObject
@@ -84,7 +89,7 @@ export default {
     getRestriccionMejor (objective, categoria) {
       const namedVector = cloneDeep(objective)
       let mejor = {
-        puntaje: -1
+        puntaje: 1
       }
       categoria.productos.forEach((producto) => {
         if (producto.puntaje > mejor.puntaje) {
