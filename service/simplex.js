@@ -7,6 +7,12 @@ export const SimplexDiaz = {
     // console.log(result)
   },
 
+  testSimplex2 () {
+    console.log('Testing2!')
+    const dummyValues = this.getDummyValuesMin()
+    return this.executeSimplex(dummyValues)
+    // console.log(result)
+  },
   executeSimplex (matrizValores) {
     let currentMatriz = matrizValores
     let x = 0
@@ -143,6 +149,54 @@ export const SimplexDiaz = {
       return valorRecalculado
     })
     return valoresFila
+  },
+
+  getDummyValuesMin () {
+    const matrizValores = [
+      {
+        nombre: 'x1',
+        coeficiente: 4,
+        valoresFila: null,
+        estaEnBase: false,
+        terminoIndependienteFila: null
+      },
+      {
+        nombre: 'x2',
+        coeficiente: 3,
+        valoresFila: null,
+        estaEnBase: false,
+        terminoIndependienteFila: null
+      },
+      {
+        nombre: 'x3',
+        coeficiente: 0,
+        valoresFila: [1, 1, 1, 0, 0, 0],
+        estaEnBase: true,
+        terminoIndependienteFila: 50
+      },
+      {
+        nombre: 'x4',
+        coeficiente: 0,
+        valoresFila: [1, 1, 0, 1, 0, 0],
+        estaEnBase: true,
+        terminoIndependienteFila: 10
+      },
+      {
+        nombre: 'x5',
+        coeficiente: 0,
+        valoresFila: [1, 1, 0, 0, -1, 0],
+        estaEnBase: true,
+        terminoIndependienteFila: 100
+      },
+      {
+        nombre: 'x6',
+        coeficiente: 0,
+        valoresFila: [1, 1, 0, 0, 0, 1],
+        estaEnBase: true,
+        terminoIndependienteFila: 100
+      }
+    ]
+    return matrizValores
   },
 
   getDummyValues () {
