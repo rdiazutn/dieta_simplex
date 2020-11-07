@@ -15,6 +15,31 @@ export const state = () => {
             nombre: 'Papa',
             precio: 2,
             puntaje: 100
+          },
+          {
+            nombre: 'Pera',
+            precio: 2,
+            puntaje: 100
+          },
+          {
+            nombre: 'Manzana',
+            precio: 2,
+            puntaje: 100
+          },
+          {
+            nombre: 'Kiwi',
+            precio: 2,
+            puntaje: 100
+          },
+          {
+            nombre: 'Papa',
+            precio: 2,
+            puntaje: 100
+          },
+          {
+            nombre: 'Leche',
+            precio: 2,
+            puntaje: 100
           }
         ]
       }

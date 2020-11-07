@@ -1,5 +1,9 @@
 import { cloneDeep } from 'lodash'
 export const SimplexDiaz = {
+  getValorSuficientementeAlto () {
+    return 1000
+  },
+
   testSimplex () {
     console.log('Testing!')
     const dummyValues = this.getDummyValues()
@@ -13,6 +17,14 @@ export const SimplexDiaz = {
     return this.executeSimplex(dummyValues)
     // console.log(result)
   },
+
+  testMayorOIgualSimplex () {
+    console.log('Testing3!')
+    const dummyValues = this.getDummyValuesToGT()
+    return this.executeSimplex(dummyValues)
+    // console.log(result)
+  },
+
   executeSimplex (matrizValores) {
     let currentMatriz = matrizValores
     let x = 0
@@ -21,7 +33,12 @@ export const SimplexDiaz = {
       x++
       const pivot = this.getPivot(currentMatriz)
       if (!pivot) {
-        return currentMatriz
+        return {
+          matriz: currentMatriz,
+          z: currentMatriz
+            .filter(elemento => elemento.estaEnBase)
+            .reduce((prev, curr) => prev + curr.coeficiente * curr.terminoIndependienteFila, 0)
+        }
       }
       currentMatriz = this.generateNewMatrix(pivot, currentMatriz)
     }
@@ -46,7 +63,7 @@ export const SimplexDiaz = {
   getColumnaPivot (matriz, elementosBase) {
     // Se calcula menor zj - cj
     let menorZjMenosCjVaABase = {
-      zjMenosCj: 1000000,
+      zjMenosCj: Infinity,
       elementoNoBaseMenor: {},
       esResultadoFinal: true,
       columna: 0
@@ -73,11 +90,12 @@ export const SimplexDiaz = {
   getFilaPivot (matriz, elementosBase, columnaPivot) {
     // Se calcula menor tita j
     let menorTitaASacarDeBase = {
-      tita: 10000000,
+      tita: Infinity,
       elementoDeBaseMenor: {}
     }
     elementosBase.forEach((elementoBase) => {
-      const valorColumna = elementoBase.valoresFila[columnaPivot.columna]
+      let valorColumna = elementoBase.valoresFila[columnaPivot.columna]
+      valorColumna = Math.max(valorColumna, 1 / this.getValorSuficientementeAlto())
       const tita = elementoBase.terminoIndependienteFila / valorColumna
       if (tita < menorTitaASacarDeBase.tita) {
         menorTitaASacarDeBase = {
@@ -149,6 +167,61 @@ export const SimplexDiaz = {
       return valorRecalculado
     })
     return valoresFila
+  },
+
+  getDummyValuesToGT () {
+    const matrizValores = [
+      {
+        nombre: 'x1',
+        coeficiente: -5,
+        valoresFila: null,
+        estaEnBase: false,
+        terminoIndependienteFila: null
+      },
+      {
+        nombre: 'x2',
+        coeficiente: 6,
+        valoresFila: null,
+        estaEnBase: false,
+        terminoIndependienteFila: null
+      },
+      {
+        nombre: 'x3',
+        coeficiente: 7,
+        valoresFila: null,
+        estaEnBase: false,
+        terminoIndependienteFila: null
+      },
+      {
+        nombre: 'x4',
+        coeficiente: 0,
+        valoresFila: null,
+        estaEnBase: false,
+        terminoIndependienteFila: null
+      },
+      {
+        nombre: 'x5',
+        coeficiente: 0,
+        valoresFila: [5, -6, 10, 0, 1, 0, 0],
+        estaEnBase: true,
+        terminoIndependienteFila: 15
+      },
+      {
+        nombre: 'x6',
+        coeficiente: -100,
+        valoresFila: [1, 5, -3, -1, 0, 1, 0],
+        estaEnBase: true,
+        terminoIndependienteFila: 15
+      },
+      {
+        nombre: 'x7',
+        coeficiente: -100,
+        valoresFila: [1, 1, 1, 0, 0, 0, 1],
+        estaEnBase: true,
+        terminoIndependienteFila: 5
+      }
+    ]
+    return matrizValores
   },
 
   getDummyValuesMin () {
