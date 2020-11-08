@@ -33,8 +33,8 @@
       >
         <v-flex
           xs12
-          sm8
-          md6
+          sm10
+          md8
         >
           <v-container class="pageContainer">
             <nuxt class="nuxt-component-inner" />
@@ -80,7 +80,7 @@ export default {
         },
         {
           icon: 'mdi-plus',
-          title: this.$t('nueva_dieta'),
+          title: this.$t('nueva_dieta.titulo'),
           to: '/nueva_dieta'
         }
       ]

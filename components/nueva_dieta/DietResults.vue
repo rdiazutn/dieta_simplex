@@ -33,7 +33,7 @@ export default {
     }
   },
   mounted () {
-    const simplexResult = SimplexDiaz.testMayorOIgualSimplex()
+    const simplexResult = SimplexDiaz.testEstandarizacion2()
     console.log(simplexResult)
   },
   methods: {

@@ -4,25 +4,74 @@ export const SimplexDiaz = {
     return 1000
   },
 
+  testEstandarizacion () {
+    const values = this.getValoresAEstandarizar()
+    const valuesEstandarizados = this.estandarizar(values)
+    const resultado = this.executeSimplex(valuesEstandarizados)
+    return resultado
+  },
+
+  testEstandarizacion2 () {
+    const values = this.getValoresAEstandarizar2()
+    const valuesEstandarizados = this.estandarizar(values)
+    const resultado = this.executeSimplex(valuesEstandarizados)
+    return resultado
+  },
+
   testSimplex () {
-    console.log('Testing!')
     const dummyValues = this.getDummyValues()
     return this.executeSimplex(dummyValues)
-    // console.log(result)
   },
 
   testSimplex2 () {
-    console.log('Testing2!')
     const dummyValues = this.getDummyValuesMin()
     return this.executeSimplex(dummyValues)
-    // console.log(result)
   },
 
   testMayorOIgualSimplex () {
-    console.log('Testing3!')
     const dummyValues = this.getDummyValuesToGT()
     return this.executeSimplex(dummyValues)
-    // console.log(result)
+  },
+
+  estandarizar (values) {
+    const variablesDeDecision = this.getVariablesDeDecision(values)
+    const restricciones = this.getRestriccionesEstandarizadas(variablesDeDecision, values.restricciones)
+    return [
+      ...variablesDeDecision,
+      ...restricciones
+    ]
+  },
+
+  getVariablesDeDecision (values) {
+    return Object.keys(values.funcionMaximizacion.coeficientes)
+      .map(variable => ({
+        nombre: variable,
+        coeficiente: values.funcionMaximizacion.coeficientes[variable],
+        valoresFila: null,
+        estaEnBase: false,
+        terminoIndependienteFila: null
+      }))
+  },
+
+  getRestriccionesEstandarizadas (variablesDeDecision, restricciones) {
+    const cantVariables = variablesDeDecision.length
+    const cantColumnas = cantVariables + restricciones.length
+    const nombreRestriccion = 'r_'
+    return restricciones.map((restriccion, index) => {
+      const valoresFila = new Array(cantColumnas).fill(0)
+      variablesDeDecision.forEach((variable, indiceVar) => {
+        valoresFila[indiceVar] = restriccion.coeficientes[variable.nombre] || 0
+      })
+      valoresFila[cantVariables + index] = 1
+      // TODO: Coeficiente -M
+      return {
+        nombre: `${nombreRestriccion}${index}`,
+        coeficiente: restriccion.tipo === '<=' ? 0 : -this.getValorSuficientementeAlto(),
+        valoresFila,
+        estaEnBase: true,
+        terminoIndependienteFila: restriccion.terminoIndependiente
+      }
+    })
   },
 
   executeSimplex (matrizValores) {
@@ -167,6 +216,73 @@ export const SimplexDiaz = {
       return valorRecalculado
     })
     return valoresFila
+  },
+
+  getValoresAEstandarizar2 () {
+    return {
+      funcionMaximizacion: {
+        coeficientes: {
+          x1: 2,
+          x2: 3,
+          x3: 4
+        },
+        tipo: 'max'
+      },
+      restricciones: [
+        {
+          coeficientes: {
+            x1: 1
+          },
+          tipo: '>=',
+          terminoIndependiente: 10
+        },
+        {
+          coeficientes: {
+            x2: 1,
+            x3: 3
+          },
+          tipo: '<=',
+          terminoIndependiente: 20
+        },
+        {
+          coeficientes: {
+            x1: 1,
+            x2: 1
+          },
+          tipo: '<=',
+          terminoIndependiente: 20
+        }
+      ]
+    }
+  },
+
+  getValoresAEstandarizar () {
+    return {
+      funcionMaximizacion: {
+        coeficientes: {
+          x1: 2,
+          x2: 3
+        },
+        tipo: 'max'
+      },
+      restricciones: [
+        {
+          coeficientes: {
+            x1: 1
+          },
+          tipo: '>=',
+          terminoIndependiente: 10
+        },
+        {
+          coeficientes: {
+            x1: 1,
+            x2: 1
+          },
+          tipo: '<=',
+          terminoIndependiente: 20
+        }
+      ]
+    }
   },
 
   getDummyValuesToGT () {

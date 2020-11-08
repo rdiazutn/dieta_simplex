@@ -1,8 +1,8 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
+    <v-col cols="12" sm="10" md="8">
       <div class="text-center">
-        <CompanyLogo src="/diet_food.png"/>
+        <CompanyLogo src="/diet_food.png" />
       </div>
       <v-card>
         <v-card-title class="headline">

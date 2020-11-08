@@ -1,7 +1,9 @@
 {
   "inicio": "Inicio",
   "mis_dietas": "Mis dietas",
-  "nueva_dieta": "Nueva dieta",
-  "lenguajes": "Lenguajes"
+  "lenguajes": "Lenguajes",
+  "nueva_dieta": {
+    "titulo": "Nueva dieta"
+  }
 }
   
