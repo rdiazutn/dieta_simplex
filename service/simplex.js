@@ -61,23 +61,42 @@ export const SimplexDiaz = {
 
   getRestriccionesEstandarizadas (variablesDeDecision, restricciones) {
     const cantVariables = variablesDeDecision.length
-    const cantColumnas = cantVariables + restricciones.length
+    const cantidadArtificiales = restricciones.filter(restriccion => restriccion.tipo === '>=').length
+    const cantColumnas = cantVariables + restricciones.length + cantidadArtificiales
     const nombreRestriccion = 'r_'
-    return restricciones.map((restriccion, index) => {
+    const restriccionesEstandarizadas = []
+    const nombreArtificiales = 'a_'
+    let offsetArtificiales = 0
+    restricciones.forEach((restriccion, index) => {
       const valoresFila = new Array(cantColumnas).fill(0)
       variablesDeDecision.forEach((variable, indiceVar) => {
         valoresFila[indiceVar] = restriccion.coeficientes[variable.nombre] || 0
       })
-      valoresFila[cantVariables + index] = 1
+      const noRequiereArtificial = restriccion.tipo === '<='
+      valoresFila[cantVariables + offsetArtificiales + index] = noRequiereArtificial ? 1 : -1
       // TODO: Coeficiente -M
-      return {
+      const estandarizada = {
         nombre: `${nombreRestriccion}${index}`,
-        coeficiente: restriccion.tipo === '<=' ? 0 : -this.getValorSuficientementeAlto(),
-        valoresFila,
-        estaEnBase: true,
-        terminoIndependienteFila: restriccion.terminoIndependiente
+        coeficiente: 0,
+        valoresFila: noRequiereArtificial ? valoresFila : null,
+        estaEnBase: noRequiereArtificial,
+        terminoIndependienteFila: noRequiereArtificial ? restriccion.terminoIndependiente : null
+      }
+      restriccionesEstandarizadas.push(estandarizada)
+      if (!noRequiereArtificial) {
+        offsetArtificiales++
+        valoresFila[cantVariables + index + offsetArtificiales] = 1
+        const variableArtificial = {
+          nombre: `${nombreArtificiales}${offsetArtificiales}`,
+          coeficiente: -this.getValorSuficientementeAlto(),
+          valoresFila,
+          estaEnBase: true,
+          terminoIndependienteFila: restriccion.terminoIndependiente
+        }
+        restriccionesEstandarizadas.push(variableArtificial)
       }
     })
+    return restriccionesEstandarizadas
   },
 
   executeSimplex (matrizValores) {
