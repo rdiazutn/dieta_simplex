@@ -4,6 +4,12 @@ export const SimplexDiaz = {
     return 1000
   },
 
+  ejecutarSimplex (valoresSinEstandarizar) {
+    const valuesEstandarizados = this.estandarizar(valoresSinEstandarizar)
+    const resultado = this.executeSimplex(valuesEstandarizados)
+    return resultado
+  },
+
   testEstandarizacion () {
     const values = this.getValoresAEstandarizar()
     const valuesEstandarizados = this.estandarizar(values)

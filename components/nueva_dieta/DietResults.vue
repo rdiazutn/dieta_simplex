@@ -15,8 +15,6 @@
   </v-card>
 </template>
 <script>
-import SimpleSimplex from 'simple-simplex'
-import { cloneDeep } from 'lodash'
 import { SimplexDiaz } from '~/service/simplex'
 import ThePrimaryButton from '~/components/General/Buttons/ThePrimaryButton'
 export default {
@@ -33,91 +31,83 @@ export default {
     }
   },
   mounted () {
-    const simplexResult = SimplexDiaz.testEstandarizacion2()
-    console.log(simplexResult)
+    const toProcess = this.procesarResultados()
+    console.log(toProcess)
+    console.log(SimplexDiaz.ejecutarSimplex(toProcess))
   },
   methods: {
     procesarResultados () {
-      const objective = this.getObjective()
-      const constraints = []
-      const ceroObjective = this.getObjective(0)
+      const coeficientes = this.getCoeficientesFuncion()
+      const restricciones = []
       this.comidasPorCategoria.forEach((categoria) => {
-        const restriccionDieta = this.getRestriccionDieta(ceroObjective, categoria)
-        const restriccionMejor = this.getRestriccionMejor(ceroObjective, categoria)
-        const restriccionPeor = this.getRestriccionPeor(ceroObjective, categoria)
-        constraints.push(restriccionDieta, restriccionMejor, restriccionPeor)
+        const restriccionDieta = this.getRestriccionDieta(categoria)
+        const restriccionMejor = this.getRestriccionMejor(categoria)
+        const restriccionPeor = this.getRestriccionPeor(categoria)
+        restricciones.push(restriccionDieta, restriccionMejor, restriccionPeor)
       })
-      const optimizationType = 'max'
-      console.log(objective)
-      console.log(constraints)
-      const solver = new SimpleSimplex({ objective, constraints, optimizationType })
-      const result = solver.solve({
-        methodName: 'simplex'
-      })
-      console.log({
-        solution: result.solution,
-        isOptimal: result.details.isOptimal
-      })
+      return {
+        funcionMaximizacion: {
+          coeficientes
+        },
+        restricciones
+      }
     },
-    getObjective (initValue) {
+    getCoeficientesFuncion () {
       const objectiveObject = {}
       this.comidasPorCategoria.forEach((categoria) => {
         categoria.productos.forEach((producto) => {
-          objectiveObject[this.getAttributeName(categoria, producto)] = initValue === 0 ? initValue : -producto.precio
+          objectiveObject[this.getAttributeName(categoria, producto)] = -producto.precio
         })
       })
       return objectiveObject
     },
-    getNamedVector (categoria) {
-      const namedVector = {}
+    getCoeficientesCategoria (categoria) {
+      const coeficientes = {}
       categoria.productos.forEach((producto) => {
-        namedVector[this.getAttributeName(categoria, producto)] = 1
+        coeficientes[this.getAttributeName(categoria, producto)] = 1
       })
-      return namedVector
+      return coeficientes
     },
-    getRestriccionDieta (objective, categoria) {
-      const namedVector = {
-        ...cloneDeep(objective),
-        ...this.getNamedVector(categoria)
-      }
+    getRestriccionDieta (categoria) {
+      const coeficientes = this.getCoeficientesCategoria(categoria)
       return {
-        namedVector,
-        constraint: '>=',
-        constant: categoria.totalDeDieta
+        coeficientes,
+        tipo: '>=',
+        terminoIndependiente: categoria.totalDeDieta
       }
     },
-    getRestriccionMejor (objective, categoria) {
-      const namedVector = cloneDeep(objective)
+    getRestriccionMejor (categoria) {
+      const coeficientes = {}
       let mejor = {
-        puntaje: 1
+        puntaje: -Infinity
       }
       categoria.productos.forEach((producto) => {
         if (producto.puntaje > mejor.puntaje) {
           mejor = producto
         }
       })
-      namedVector[this.getAttributeName(categoria, mejor)] = 1
+      coeficientes[this.getAttributeName(categoria, mejor)] = 1
       return {
-        namedVector,
-        constraint: '>=',
-        constant: categoria.totalDeDieta / 2
+        coeficientes,
+        tipo: '>=',
+        terminoIndependiente: categoria.totalDeDieta / 2
       }
     },
-    getRestriccionPeor (objective, categoria) {
-      const namedVector = cloneDeep(objective)
+    getRestriccionPeor (categoria) {
+      const coeficientes = {}
       let peor = {
-        puntaje: 1000000
+        puntaje: Infinity
       }
       categoria.productos.forEach((producto) => {
         if (producto.puntaje < peor.puntaje) {
           peor = producto
         }
       })
-      namedVector[this.getAttributeName(categoria, peor)] = 1
+      coeficientes[this.getAttributeName(categoria, peor)] = 1
       return {
-        namedVector,
-        constraint: '<=',
-        constant: categoria.totalDeDieta / 10
+        coeficientes,
+        tipo: '<=',
+        terminoIndependiente: categoria.totalDeDieta / 10
       }
     },
     getAttributeName (categoria, producto) {
