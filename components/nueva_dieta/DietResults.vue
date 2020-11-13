@@ -7,7 +7,7 @@
           <ThePrimaryButton
             inner-text="Procesar resultados"
             icon="mdi-cog"
-            @click="procesarResultados"
+            @click="procesarYEjecutarSimplex"
           />
         </v-col>
       </v-row>
@@ -36,6 +36,11 @@ export default {
     console.log(SimplexDiaz.ejecutarSimplex(toProcess))
   },
   methods: {
+    procesarYEjecutarSimplex () {
+      const toProcess = this.procesarResultados()
+      console.log(toProcess)
+      console.log(SimplexDiaz.ejecutarSimplex(toProcess))
+    },
     procesarResultados () {
       const coeficientes = this.getCoeficientesFuncion()
       const restricciones = []
@@ -43,7 +48,10 @@ export default {
         const restriccionDieta = this.getRestriccionDieta(categoria)
         const restriccionMejor = this.getRestriccionMejor(categoria)
         const restriccionPeor = this.getRestriccionPeor(categoria)
-        restricciones.push(restriccionDieta, restriccionMejor, restriccionPeor)
+        restricciones.push(restriccionDieta, restriccionMejor)
+        if (this.sonDistintasRestricciones(restriccionPeor, restriccionMejor)) {
+          restricciones.push(restriccionPeor)
+        }
       })
       return {
         funcionMaximizacion: {
@@ -51,6 +59,9 @@ export default {
         },
         restricciones
       }
+    },
+    sonDistintasRestricciones (restriccion, otraRestrccion) {
+      return Object.keys(restriccion.coeficientes)[0] !== Object.keys(otraRestrccion.coeficientes)[0]
     },
     getCoeficientesFuncion () {
       const objectiveObject = {}

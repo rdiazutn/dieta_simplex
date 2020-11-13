@@ -68,7 +68,7 @@ export default {
     generarListadoComparaciones () {
       this.comidasPorCategoria.forEach((categoria) => {
         let i
-        for (i = 0; i < categoria.productos.length && categoria.productos.length > 1; i++) {
+        for (i = 0; i < 2 && categoria.productos.length > 1; i++) {
           const parejaRandom = this.generarParejaRandom(categoria)
           if (parejaRandom) {
             this.listadoComparaciones.push(parejaRandom)
@@ -87,7 +87,7 @@ export default {
         do {
           elemento2 = random(0, productos.length - 1)
         } while (elemento1 === elemento2)
-        if (cont === 50) {
+        if (cont === 2) {
           return null
         }
       } while (this.existeComparacion(categoria, elemento1, elemento2))

@@ -103,7 +103,7 @@ export const SimplexDiaz = {
     let currentMatriz = matrizValores
     let x = 0
     // Límite de iteraciones
-    while (x < 20) {
+    while (x < 30) {
       x++
       const pivot = this.getPivot(currentMatriz)
       if (!pivot) {
