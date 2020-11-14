@@ -2,7 +2,7 @@
   <v-row justify="center" align="center">
     <v-col cols="12" sm="10" md="8">
       <div class="text-center">
-        <CompanyLogo src="/diet_food.png" />
+        <CompanyLogo src="/dieta_simplex/diet_food.png" />
       </div>
       <v-card>
         <v-card-title class="headline">
