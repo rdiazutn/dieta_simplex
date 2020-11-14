@@ -651,7 +651,9 @@ export const state = () => {
           }
         ]
       }
-    ]
+    ],
+    resultados: [],
+    ultimoResultado: null
   }
 }
 export const mutations = {
@@ -661,5 +663,14 @@ export const mutations = {
     const prodP = categoriaAModificar.productos[productoPerdedor]
     prodG.puntaje += prodP.puntaje * 0.5
     prodP.puntaje -= prodP.puntaje * 0.4
+  },
+
+  agregarResultado (state, resultado) {
+    const variablesUsadas = {
+      z: resultado.z,
+      matriz: resultado.matriz.filter(producto => producto.estaEnBase && producto.coeficiente)
+    }
+    state.resultados.push(variablesUsadas)
+    state.ultimoResultado = variablesUsadas
   }
 }

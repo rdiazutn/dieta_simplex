@@ -4,6 +4,16 @@
   "lenguajes": "Lenguajes",
   "nueva_dieta": {
     "titulo": "Nueva dieta"
+  },
+  "resultado": {
+    "producto": "Producto",
+    "precio_por_unidad": "Precio por unidad",
+    "cantidad": "Cantidad",
+    "total": "Total"
+  },
+  "errors": {
+    "oops": "Parece que ha accedido a una url inválida",
+    "go_to_start": "Volver al inicio"
   }
 }
   
