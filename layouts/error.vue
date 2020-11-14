@@ -1,44 +1,31 @@
 <template>
-  <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
+  <v-app dark class="w-75vw">
+    <v-row justify="center">
+      <v-col cols="10">
+        <CompanyLogo src="/chrome.png" size="big" />
+        <h1>Oops...</h1>
+        <p>{{ $t('errors.oops') }}</p>
+        <ThePrimaryButton
+          :inner-text="$t('errors.go_to_start')"
+          @click="goToLogin"
+        />
+      </v-col>
+    </v-row>
   </v-app>
 </template>
 
 <script>
+import ThePrimaryButton from '~/components/General/Buttons/ThePrimaryButton'
+import CompanyLogo from '~/components/General/CompanyLogo'
 export default {
-  layout: 'empty',
-  props: {
-    error: {
-      type: Object,
-      default: null
-    }
+  components: {
+    ThePrimaryButton,
+    CompanyLogo
   },
-  data () {
-    return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    }
-  },
-  head () {
-    const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
-    return {
-      title
+  methods: {
+    goToLogin () {
+      this.$router.push('/')
     }
   }
 }
 </script>
-
-<style scoped>
-h1 {
-  font-size: 20px;
-}
-</style>
