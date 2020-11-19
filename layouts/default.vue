@@ -74,11 +74,6 @@ export default {
           to: '/'
         },
         {
-          icon: 'mdi-list',
-          title: this.$t('mis_dietas'),
-          to: '/mis_dietas'
-        },
-        {
           icon: 'mdi-plus',
           title: this.$t('nueva_dieta.titulo'),
           to: '/nueva_dieta'

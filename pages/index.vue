@@ -14,6 +14,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn
+            class="w-100"
             color="primary"
             nuxt
             to="/nueva_dieta"
